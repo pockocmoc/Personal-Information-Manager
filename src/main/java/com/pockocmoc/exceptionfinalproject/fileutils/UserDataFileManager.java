@@ -7,12 +7,10 @@ public class UserDataFileManager {
 
     private static final String DELIMITER = " ";
 
-    public static void saveUserDataToFile(String filename, String surname,
-            String name, String patronymic, String dateOfBirth,
+    public static void saveUserDataToFile(String filename, String surname, String dateOfBirth,
             int phoneNumber, char gender) {
         try (FileWriter writer = new FileWriter(filename, true)) {
-            String userRow = surname + DELIMITER + name + DELIMITER
-                    + patronymic + DELIMITER + dateOfBirth + DELIMITER
+            String userRow = surname + DELIMITER + dateOfBirth + DELIMITER
                     + phoneNumber + DELIMITER + gender + "\n";
 
             writer.write(userRow);

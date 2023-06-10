@@ -1,60 +1,52 @@
 package com.pockocmoc.exceptionfinalproject;
 
 import com.pockocmoc.exceptionfinalproject.data_validator.Validator;
+import com.pockocmoc.exceptionfinalproject.exception.GenderException;
+import com.pockocmoc.exceptionfinalproject.exception.InvalidIDateFormatException;
+import com.pockocmoc.exceptionfinalproject.exception.InvalidPhoneNumberFormatException;
+import com.pockocmoc.exceptionfinalproject.exception.InvalidSurnameException;
 import com.pockocmoc.exceptionfinalproject.fileutils.UserDataFileManager;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidIDateFormatException, 
+            InvalidPhoneNumberFormatException, GenderException, InvalidSurnameException {
 
         String input;
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Введите данные в формате: Фамилия Имя Отчество Дата_рождения "
+            System.out.println("Введите данные в формате: Фамилия,Имя,Отчество Дата_рождения "
                     + "Телефонный_номер Пол");
             input = scanner.nextLine();
         }
         String[] inputData = input.split(" ");
-        if (inputData.length != 6) {
+        if (inputData.length != 4) {
             System.err.println("Ошибка: неверное количество данных.");
+            System.exit(1);
             return;
         }
 
-        String surname = inputData[0];
-        String name = inputData[1];
-        String patronymic = inputData[2];
-        String dateOfBirth = inputData[3];
-        String phoneNumberString = inputData[4];
-        String gender = inputData[5];
-        char sex = gender.charAt(0);
+        String surnameString = inputData[0];
+        String dateOfBirthString = inputData[1];
+        String phoneNumberString = inputData[2];
+        String genderString = inputData[3];
+        char gender = genderString.charAt(0);
 
         Validator validator = new Validator();
+        
+        String validatedSurname = validator.checkSurnameLength(surnameString);
 
-        String validatedDateString = validator.dateOfBirthValidator(dateOfBirth);
-        if (validatedDateString == null) {
-            System.out.println("Ошибка неверный формат даты.");
-            return;
-        }
+        String validatedDateString = validator.dateOfBirthValidator(dateOfBirthString);
 
-        int phoneNum = validator.phoneNumberValidator(phoneNumberString);
-        if (phoneNum == 0) {
-            System.out.println("Ошибка неверный тип телефонного номера.");
-            return;
-        }
+        int validatedPhoneNum = validator.phoneNumberValidator(phoneNumberString);
 
-        switch (sex) {
-            case 'm', 'f' -> {
-            }
-            default -> {
-                System.out.println("Ошибка: пол должен быть указан как 'm' или 'f'");
-                return;
-            }
-        }
+        char validatedGender = validator.validateGender(gender);
+        
+        String firstWordSurname = surnameString.split(",")[0];
+        String surnameFileName = "data/" + firstWordSurname + ".csv";
 
-        String surnameFileName = "data/" + surname + ".csv";
-
-        UserDataFileManager.saveUserDataToFile(surnameFileName, surname, name, patronymic,
-                dateOfBirth, phoneNum, sex);
+        UserDataFileManager.saveUserDataToFile(surnameFileName, validatedSurname,
+                validatedDateString, validatedPhoneNum, validatedGender);
 
     }
 
