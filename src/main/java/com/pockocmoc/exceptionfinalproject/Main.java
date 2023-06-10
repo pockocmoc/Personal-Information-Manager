@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws InvalidIDateFormatException, 
+    public static void main(String[] args) throws InvalidIDateFormatException,
             InvalidPhoneNumberFormatException, GenderException, InvalidSurnameException {
 
         String input;
@@ -26,14 +26,26 @@ public class Main {
             return;
         }
 
-        String surnameString = inputData[0];
-        String dateOfBirthString = inputData[1];
-        String phoneNumberString = inputData[2];
-        String genderString = inputData[3];
-        char gender = genderString.charAt(0);
+        String surnameString = "";
+        String dateOfBirthString = "";
+        String phoneNumberString = "";
+        String genderString = "";
 
         Validator validator = new Validator();
-        
+
+        for (String s : inputData) {
+            if (s.length() == 1) {
+                genderString = s;
+            } else if (s.contains(".")) {
+                dateOfBirthString = s;
+            } else if (s.contains(",")) {
+                surnameString = s;
+            } else {
+                phoneNumberString = s;
+            }
+        }
+        char gender = genderString.charAt(0);
+
         String validatedSurname = validator.checkSurnameLength(surnameString);
 
         String validatedDateString = validator.dateOfBirthValidator(dateOfBirthString);
@@ -41,7 +53,7 @@ public class Main {
         int validatedPhoneNum = validator.phoneNumberValidator(phoneNumberString);
 
         char validatedGender = validator.validateGender(gender);
-        
+
         String firstWordSurname = surnameString.split(",")[0];
         String surnameFileName = "data/" + firstWordSurname + ".csv";
 
