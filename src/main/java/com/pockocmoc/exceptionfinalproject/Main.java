@@ -2,6 +2,7 @@ package com.pockocmoc.exceptionfinalproject;
 
 import com.pockocmoc.exceptionfinalproject.data_validator.Validator;
 import com.pockocmoc.exceptionfinalproject.exception.GenderException;
+import com.pockocmoc.exceptionfinalproject.exception.InputDataException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidIDateFormatException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidPhoneNumberFormatException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidSurnameException;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) throws InvalidIDateFormatException,
-            InvalidPhoneNumberFormatException, GenderException, InvalidSurnameException {
+            InvalidPhoneNumberFormatException, GenderException, InvalidSurnameException, InputDataException {
 
         String input;
         try (Scanner scanner = new Scanner(System.in)) {
@@ -19,19 +20,15 @@ public class Main {
                     + "Телефонный_номер Пол");
             input = scanner.nextLine();
         }
-        String[] inputData = input.split(" ");
-        if (inputData.length != 4) {
-            System.err.println("Ошибка: неверное количество данных.");
-            System.exit(1);
-            return;
-        }
+
+        Validator validator = new Validator();
+        
+        String[] inputData = validator.checkInputDataLength(input);
 
         String surnameString = "";
         String dateOfBirthString = "";
         String phoneNumberString = "";
         String genderString = "";
-
-        Validator validator = new Validator();
 
         for (String s : inputData) {
             if (s.length() == 1) {

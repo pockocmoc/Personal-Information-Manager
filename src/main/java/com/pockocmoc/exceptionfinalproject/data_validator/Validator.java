@@ -1,11 +1,21 @@
 package com.pockocmoc.exceptionfinalproject.data_validator;
 
 import com.pockocmoc.exceptionfinalproject.exception.GenderException;
+import com.pockocmoc.exceptionfinalproject.exception.InputDataException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidIDateFormatException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidPhoneNumberFormatException;
 import com.pockocmoc.exceptionfinalproject.exception.InvalidSurnameException;
 
 public class Validator {
+
+    public String[] checkInputDataLength(String input) throws InputDataException {
+        String[] inputData = input.split(" ");
+        if (inputData.length != 4) {
+            throw new InputDataException(1, "Ошибка: неверное количество данных.");
+        } else {
+            return inputData;
+        }
+    }
 
     public String checkSurnameLength(String surname) throws InvalidSurnameException {
         if (surname.length() < 2 || surname.length() > 50) {
